@@ -2,6 +2,8 @@
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
@@ -24,20 +26,23 @@ namespace ConsoleApp1
                 /* Start Listening at the specified port */
                 
                 Console.WriteLine("The server is running at port "+serverport+"...");
-                Console.WriteLine("The local End point is " +
-                                  tcpListener.LocalEndpoint );
-                Console.WriteLine("Waiting for a connection...");
+                
+                
                 Socket skt;
                 byte[] b;
                 int k;
                 
                 tcpListener.Start();
+                Console.WriteLine("The local End point is " + tcpListener.LocalEndpoint );
+                Console.WriteLine("Waiting for a connection...");
+                
                 skt =tcpListener.AcceptSocket();
+                Console.WriteLine("Connection accepted from " + skt.RemoteEndPoint);
+                
                 while (true)
                 {
                     b= new byte[100]; //todo: tune buffer size.
                     k = skt.Receive(b);
-                    Console.WriteLine("Connection accepted from " + skt.RemoteEndPoint);
                     Console.WriteLine("Recieved...");
                     
                     for (int i = 0; i < k; i++)
@@ -45,7 +50,7 @@ namespace ConsoleApp1
 
                     ASCIIEncoding asen = new ASCIIEncoding();
 
-                    skt.Send(asen.GetBytes("The string was recieved by the server.\n"));
+                    skt.Send(asen.GetBytes("The string was received by the server.\n"));
 
                     Console.WriteLine("\nSent Acknowledgement");
                 }
