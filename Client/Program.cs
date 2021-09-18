@@ -10,21 +10,20 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            string serverip = "192.168.1.100";
+            string serverip = "10.0.0.100";
             int serverport = 8001;
             try
             {
                 TcpClient tcpclnt;
                 Console.WriteLine("Connecting.....");
             
-                
+                tcpclnt = new TcpClient();
+                tcpclnt.Connect(serverip,serverport);
                 // use the ipaddress as in the server program
             
                 Console.WriteLine("Connected");
                 while (true)
                 {
-                    tcpclnt = new TcpClient();
-                    tcpclnt.Connect(serverip,serverport);
                     Console.Write("Enter the string to be transmitted : ");
                     string str = Console.ReadLine();
                     Stream stm = tcpclnt.GetStream();
@@ -36,9 +35,8 @@ namespace Client
                     int k = stm.Read(bb, 0, 100);
                     for (int i = 0; i < k; i++)
                         Console.Write(Convert.ToChar(bb[i]));
-                    tcpclnt.Close();
                 }
-                
+                tcpclnt.Close();
             }
         
             catch (Exception e) {
